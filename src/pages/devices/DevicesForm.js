@@ -4,11 +4,19 @@ import {
     NumberInputField, NumberIncrementStepper, NumberInputStepper,
     NumberDecrementStepper, Select, Button
 } from '@chakra-ui/react'
-
+import { useNavigate } from 'react-router-dom'
 function DevicesForm() {
 
     const [select, setSelect] = useState('')
     const [number, setNumber] = useState(0)
+    const [linkTo, setLinkTo] = useState('')
+    const [devices, setDevices] = useState(
+        localStorage.getItem('devices') ?
+            JSON.parse(localStorage.getItem('devices')) :
+            [{ id: 'internet', name: 'internet', value: 1, linkTo: 'internet-0' }]
+    )
+
+    const navigate = useNavigate()
 
     const IncrementStepper = () => {
         setNumber(number + 1)
@@ -19,13 +27,15 @@ function DevicesForm() {
     }
 
     const handleSubmit = (e) => {
-        const devices = JSON.parse(localStorage.getItem('devices')) || []
+
         e.preventDefault()
-        if (!select || !number) {
+        if (!select || !number || !linkTo) {
             return
         }
-        devices.push({ select, number })
-        localStorage.setItem('devices', JSON.stringify(devices))
+        const newDevice = { id: select, name: select, value: number, linkTo: linkTo }
+        setDevices([...devices, newDevice])
+        localStorage.setItem('devices', JSON.stringify([...devices, newDevice]))
+        navigate('/graph')
     }
 
 
@@ -68,17 +78,6 @@ function DevicesForm() {
                                 <option value="phone">Phone</option>
                                 <option value="tablet">Tablet</option>
                                 <option value="smartwatch">Smartwatch</option>
-                                <option value="smarttv">Smart TV</option>
-                                <option value="smartfridge">Smart Fridge</option>
-                                <option value="smartthermostat">Smart Thermostat</option>
-                                <option value="smartlock">Smart Lock</option>
-                                <option value="smartdoorbell">Smart Doorbell</option>
-                                <option value="smartlightbulb">Smart Lightbulb</option>
-                                <option value="smartplug">Smart Plug</option>
-                                <option value="smartfan">Smart Fan</option>
-                                <option value="smartvacuum">Smart Vacuum</option>
-                                <option value="smartrobot">Smart Robot</option>
-                                <option value="smartmirror">Smart Mirror</option>
                             </Select>
                         </FormControl>
                         <FormControl id="number" isRequired>
@@ -102,6 +101,30 @@ function DevicesForm() {
                             </NumberInput>
 
                         </FormControl>
+
+                        <FormControl id="links">
+                            <FormLabel>Links</FormLabel>
+                            <Select
+                                name="links"
+                                placeholder="Select links"
+                                onChange={(e) => setLinkTo(e.target.value)}
+                                value={linkTo}
+                                isRequired
+                            >
+                                {
+                                    devices.map((device) => (
+                                        [...Array(device.value)].map((_, i) => (
+                                            <option>
+                                                {device.id}-{i}
+                                            </option>
+                                        ))
+                                    ))
+
+                                }
+                            </Select>
+                        </FormControl>
+
+                        { }
                         <Button
                             mt={4}
                             colorScheme="teal"

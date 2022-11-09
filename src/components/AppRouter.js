@@ -5,7 +5,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/dashboard/Dashboard';
 import Devices from '../pages/devices/Devices';
-import Graph from '../pages/graph/Graph';
+import Network from '../pages/graph/Graph';
 
 
 const AppRouter = () => {
@@ -17,7 +17,7 @@ const AppRouter = () => {
                     currentUser ? <Dashboard /> : <Login />
                 } />
                 <Route exact path="/login" element={
-                    currentUser ? <Login /> : <Dashboard />
+                    !currentUser ? <Login /> : <Dashboard />
                 } />
                 <Route exact path="/register" element={
                     <Register />
@@ -28,7 +28,7 @@ const AppRouter = () => {
                 } />
 
                 <Route exact path='/graph' element={
-                    currentUser ? <Graph /> : <Login />
+                    currentUser ? <Network /> : <Login />
                 } />
 
 
