@@ -10,7 +10,6 @@ const Register = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirm, setPasswordConfirm] = useState('')
-    // const [error, setError] = useState('')
     const toast = useToast()
     const { register } = useAuth()
     const navigate = useNavigate()
@@ -146,7 +145,7 @@ const Register = () => {
                                     border="1px solid #e2e8f0"
                                     onClick={handleSubmit}
                                 >
-                                    Sign in
+                                    Sign up
                                 </Button>
                                 <LoginProviders />
                             </Stack>

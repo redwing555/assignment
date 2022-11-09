@@ -1,10 +1,7 @@
 import React from 'react'
-import { useAuth } from '../../context/AuthContext'
 import Sidebar from '../../components/Sidebar'
 import { Flex } from '@chakra-ui/react'
-
 function Dashboard() {
-    const { currentUser, logout } = useAuth()
 
 
     return (
