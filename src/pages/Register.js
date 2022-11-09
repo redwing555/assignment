@@ -14,6 +14,7 @@ const Register = () => {
     const toast = useToast()
     const { register } = useAuth()
     const navigate = useNavigate()
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -26,6 +27,16 @@ const Register = () => {
             })
             return
 
+        }
+        // check if password is passwordRegex
+        if (!passwordRegex.test(password)) {
+            toast({
+                title: "Password must be at least 8 characters long, contain at least one letter, one number and one special character",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            })
+            return
         }
         if (password !== passwordConfirm) {
             toast({
@@ -78,7 +89,7 @@ const Register = () => {
                         p={8}
                     >
                         <Stack spacing={4}>
-                            <FormControl id="email">
+                            <FormControl id="email" isRequired>
                                 <FormLabel>Email address</FormLabel>
                                 <Input
                                     type="email"
@@ -88,7 +99,7 @@ const Register = () => {
 
                                 />
                             </FormControl>
-                            <FormControl id="password">
+                            <FormControl id="password" isRequired>
                                 <FormLabel>Password</FormLabel>
                                 <Input
                                     type="password"
@@ -97,10 +108,10 @@ const Register = () => {
 
                                 />
                                 <Text fontSize={'sm'} color={'gray.500'}>
-                                    Use at least 8 characters, a mix of letters, numbers & symbols.
+                                    Use at least 8 characters long, one letter, one number and one special character.
                                 </Text>
                             </FormControl>
-                            <FormControl id="password">
+                            <FormControl id="password" isRequired>
                                 <FormLabel>Confirm Password</FormLabel>
                                 <Input
 
@@ -127,11 +138,12 @@ const Register = () => {
                                     <Link color={'blue.400'}>Forgot password?</Link>
                                 </Stack>
                                 <Button
-                                    bg={'blue.400'}
-                                    color={'white'}
+                                    bg={'gray.200'}
+                                    color={'gray.800'}
                                     _hover={{
-                                        bg: 'blue.500',
+                                        bg: 'gray.100',
                                     }}
+                                    border="1px solid #e2e8f0"
                                     onClick={handleSubmit}
                                 >
                                     Sign in
@@ -141,7 +153,7 @@ const Register = () => {
 
                             <NavLink to="/login">
                                 <Text fontSize={'sm'}
-                                    color={'gray.500'}
+                                    color={'blue.500'}
                                     align={'center'}
                                     _hover={{
                                         textDecoration: 'underline',
