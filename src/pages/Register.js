@@ -10,7 +10,6 @@ const Register = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirm, setPasswordConfirm] = useState('')
-    // const [error, setError] = useState('')
     const toast = useToast()
     const { register } = useAuth()
     const navigate = useNavigate()

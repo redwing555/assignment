@@ -1,11 +1,10 @@
 
 
-//create sidebar component with a function using chakra ui components
 import React, { useState } from 'react'
 import { Box, Text, Icon, Flex, Image, Button } from '@chakra-ui/react'
 import { RiDashboardLine } from 'react-icons/ri'
 import { BiNetworkChart, BiDevices, BiLogOut, BiChevronLeft, BiChevronRight } from 'react-icons/bi'
-import { Navigate, NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 

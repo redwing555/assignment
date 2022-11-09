@@ -7,7 +7,6 @@ function LoginProviders(props) {
     return (
         <div>
             <Flex
-                // direction={{ base: 'column', sm: 'row' }}
                 align={'center'}
                 justify={'center'}
                 gap={8}

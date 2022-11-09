@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import Sidebar from '../../components/Sidebar'
 import { Graph } from 'react-d3-graph'
@@ -7,13 +7,11 @@ import devicesSvg from '../../utils/devicesSvg'
 
 function Network() {
     const getDevices = () => {
-
-        return localStorage.getItem('devices') ? JSON.parse(localStorage.getItem('devices')) : []
+        return localStorage.getItem('devices') ?
+            JSON.parse(localStorage.getItem('devices')) :
+            [{ id: 'internet', name: 'internet', value: 1, link: 'internet-0' }]
 
     }
-
-    // console.log("devices", getDevices())
-
 
     const nodes = getDevices().map((device) => {
         return [...Array(device.value).keys()].map((i) => {
@@ -21,36 +19,19 @@ function Network() {
                 id: `${device.id}-${i}`,
                 name: `${device.id}-${i}`,
                 svg: devicesSvg[device.name],
-                size: 500,
-                symbolType: 'circle',
+                linkTo: device.linkTo
             }
         })
     })
 
-    // console.log(nodes.flat())
 
-
-    nodes.flat().push(
-        {
-            id: 'internet',
-            name: 'internet',
-
-            svg: devicesSvg['internet'],
-            size: 500,
-        }
-    )
 
     const links = nodes.flat().map((node, index) => {
         return {
             source: node.id,
-            target: nodes.flat()[index + 1] ? nodes.flat()[index + 1].id : nodes.flat()[0].id,
+            target: node.linkTo ? node.linkTo : 'internet-0'
         }
     })
-
-
-
-
-
 
     const data = {
         nodes: nodes.flat(),
@@ -62,14 +43,14 @@ function Network() {
         nodeHighlightBehavior: true,
         node: {
             size: 500,
-            fontColor: 'blue',
-            fontSize: 10,
-            fontWeight: 'normal',
+            fontColor: '#00010',
+            fontSize: 15,
+            fontWeight: 'bold',
             highlightColor: 'red',
             highlightFontSize: 20,
             highlightFontWeight: 'bold',
             highlightStrokeWidth: 1.5,
-            labelProperty: 'id',
+            labelProperty: 'name',
         },
         link: {
             highlightColor: "lightblue",
@@ -80,7 +61,7 @@ function Network() {
         collapsible: true,
         height: window.innerHeight,
         highlightDegree: 2,
-        highlightOpacity: 0.2,
+        highlightOpacity: 0.1,
         linkHighlightBehavior: true,
         maxZoom: 12,
         minZoom: 0.05,
@@ -88,19 +69,33 @@ function Network() {
         staticGraph: false,
         width: window.innerWidth,
         d3: {
-            alphaTarget: 0.05,
+            alphaTarget: 0.01,
             gravity: -300,
             linkLength: 120,
             linkStrength: 2,
         },
     };
 
+    const toast = useToast()
+
     const onClickNode = function (nodeId) {
-        window.alert(`Clicked node ${nodeId}`);
+        toast({
+            title: "Node clicked",
+            description: `Node ${nodeId} clicked`,
+            status: "info",
+            duration: 9000,
+            isClosable: true,
+        })
     };
 
     const onClickLink = function (source, target) {
-        window.alert(`Clicked link between ${source} and ${target}`);
+        toast({
+            title: "A link between these nodes was clicked.",
+            description: `Clicked link between ${source} and ${target}`,
+            status: "info",
+            duration: 9000,
+            isClosable: true,
+        })
     };
 
     const ResetNodesPosition = React.useCallback(() => {
@@ -155,7 +150,7 @@ function Network() {
                 </Button>
 
                 <Graph
-                    id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
+                    id="graph-id"
                     data={data}
                     config={myConfig}
                     onClickNode={onClickNode}
@@ -164,12 +159,7 @@ function Network() {
 
                 />
             </Box>
-
         </Flex >
-
-
-
-
 
     )
 }
