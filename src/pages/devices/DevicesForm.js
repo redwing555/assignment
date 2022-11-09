@@ -4,11 +4,13 @@ import {
     NumberInputField, NumberIncrementStepper, NumberInputStepper,
     NumberDecrementStepper, Select, Button
 } from '@chakra-ui/react'
-
+import { useNavigate } from 'react-router-dom'
 function DevicesForm() {
 
     const [select, setSelect] = useState('')
     const [number, setNumber] = useState(0)
+
+    const navigate = useNavigate()
 
     const IncrementStepper = () => {
         setNumber(number + 1)
@@ -24,8 +26,9 @@ function DevicesForm() {
         if (!select || !number) {
             return
         }
-        devices.push({ select, number })
+        devices.push({ id: select, name: select, value: number })
         localStorage.setItem('devices', JSON.stringify(devices))
+        navigate('/graph')
     }
 
 

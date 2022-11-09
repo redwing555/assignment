@@ -4,12 +4,17 @@
 import React, { useState } from 'react'
 import { Box, Text, Icon, Flex, Image, Button } from '@chakra-ui/react'
 import { RiDashboardLine } from 'react-icons/ri'
-import { BiNetworkChart, BiDevices, BiLogOut, BiCircle } from 'react-icons/bi'
-import { NavLink } from 'react-router-dom'
+import { BiNetworkChart, BiDevices, BiLogOut, BiChevronLeft, BiChevronRight } from 'react-icons/bi'
+import { Navigate, NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 
 const Sidebar = () => {
     const [active, setActive] = useState(false)
+
+
+
+    const { logout } = useAuth()
 
 
     const handleActive = () => {
@@ -19,7 +24,7 @@ const Sidebar = () => {
     return (
         <Box
             as="aside"
-            w={active ? "64" : "6rem"}
+            w={active ? "64" : "2.2rem"}
             bg={'gray.50'}
             transition="all 0.5s"
             height="100vh"
@@ -33,14 +38,7 @@ const Sidebar = () => {
 
         >
 
-            <Icon
-                as={BiCircle}
-                w={8}
-                h={8}
-                color="gray.500"
-                cursor="pointer"
-                onClick={handleActive}
-            />
+
 
             <Flex
                 align="center"
@@ -76,6 +74,7 @@ const Sidebar = () => {
 
             <SidebarContent
                 active={active}
+                handleActive={handleActive}
             />
             <Box
                 position="absolute"
@@ -86,28 +85,53 @@ const Sidebar = () => {
                 w='100%'
 
             >
-                <Button
-                    fontSize="sm"
-                    fontWeight="bold"
-                    bg='red.400'
-                    textTransform="uppercase"
-                    leftIcon={<BiLogOut size={20} />}
-                    color="white"
-                    _hover={{
-                        bg: 'red.500',
-                    }}
-                    _active={{
-                        bg: 'red.600',
-                        transform: 'scale(0.95)',
-                    }}
-                    p={active ? '4' : '2'}
-                    transition="all 0.5s"
 
-                // variant="solid"
-
+                <Flex
+                    align="center"
+                    justify="center"
+                    flexDir='row'
+                    gap="5"
                 >
-                    {active ? 'Logout' : ''}
-                </Button>
+                    <Button
+                        fontSize="sm"
+                        fontWeight="bold"
+                        bg='red.400'
+                        textTransform="uppercase"
+                        leftIcon={<BiLogOut size={20} />}
+                        color="white"
+                        _hover={{
+                            bg: 'red.500',
+                        }}
+                        _active={{
+                            bg: 'red.600',
+                            transform: 'scale(0.95)',
+                        }}
+                        // p={active ? '4' : '2'}
+                        transition="all 0.5s"
+                        onClick={logout}
+                        opacity={active ? 1 : 0}
+
+
+                    // variant="solid"
+
+                    >
+                        {active ? 'Logout' : ''}
+                    </Button>
+
+                    <Icon
+                        as={active ? BiChevronLeft : BiChevronRight}
+                        w={6}
+                        h={6}
+                        ml={active ? '0' : '-4.3rem'}
+                        zIndex="docked"
+                        color="gray.500"
+                        cursor="pointer"
+                        transition="all 300ms"
+                        borderRadius="50%"
+                        border="2px solid gray"
+                        onClick={handleActive}
+                    />
+                </Flex>
 
             </Box>
 
@@ -118,7 +142,8 @@ const Sidebar = () => {
 }
 
 const SidebarContent = (props) => {
-    const { active } = props
+    const { active, handleActive } = props
+    const navigate = useNavigate()
     const sidebarContentObj = {
         dashboard: {
             icon: RiDashboardLine,
@@ -155,20 +180,38 @@ const SidebarContent = (props) => {
                         p="4"
                         display="flex"
                         alignItems="center"
-                        m={2}
+                        ml={active ? '0' : '-1.6rem'}
                         cursor="pointer"
                         _hover={{
-                            bg: 'gray.100'
+                            bg: active ? "gray.200" : 'transparent',
+
                         }}
                         borderRadius="md"
 
+
                     >
-                        <Icon as={value.icon} fontSize="20" />
+                        <Icon
+                            as={value.icon}
+                            h={6}
+                            w={6}
+
+                            onClick={() => {
+                                navigate(value.link)
+                                handleActive()
+                            }
+                            }
+                            _hover={{
+                                bg: active ? 'transparent' : 'gray.200',
+                            }}
+                            borderRadius="md"
+                            p="2px"
+
+                        />
                         <NavLink
                             to={value.link}
                             exact
-                            activeClassName="active"
                             style={{ textDecoration: 'none', color: 'black' }}
+                            onClick={handleActive}
 
                         >
 
@@ -177,7 +220,7 @@ const SidebarContent = (props) => {
                                 fontWeight="medium"
                                 color="gray.70"
                                 transition="all 0.5s"
-                                content={active ? value.text : ''}
+
                             >
                                 {value.text}
                             </Text>
@@ -189,60 +232,5 @@ const SidebarContent = (props) => {
         </Box>
     )
 }
-
-
-// const SidebarContent = () => {
-//     return (
-// <Box
-//     bg={'gray.70'}
-//     display="flex"
-//     flexDirection="column"
-//     gap={4}
-//     p="4"
-//     mt={40}
-//     alignItems="center"
-//     justifyContent="center"
-// >
-//     <Box
-//         display={'flex'}
-//         _hover={{
-//             bg: 'gray.100',
-//             cursor: 'pointer'
-//         }}
-//         w="100%"
-//         p="2"
-//         borderRadius="md"
-
-//     >
-//         <Icon as={RiDashboardLine} fontSize="20" />
-//         <Text ml="4" fontWeight="medium">
-
-//             Devices
-//         </Text>
-//     </Box>
-//     <Box
-//         display={'flex'}
-//         _hover={{
-//             bg: 'gray.100',
-//             cursor: 'pointer'
-//         }}
-//         w="100%"
-//         p="2"
-//         borderRadius="md"
-//     >
-//         <Icon as={BiNetworkChart} fontSize="20" />
-//         <Text ml="4" fontWeight="medium">
-//             Graph
-//         </Text>
-
-//     </Box>
-
-
-// </Box >
-
-
-//     )
-// }
-
 
 export default Sidebar

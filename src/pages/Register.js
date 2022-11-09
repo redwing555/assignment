@@ -146,7 +146,7 @@ const Register = () => {
                                     border="1px solid #e2e8f0"
                                     onClick={handleSubmit}
                                 >
-                                    Sign in
+                                    Sign up
                                 </Button>
                                 <LoginProviders />
                             </Stack>
