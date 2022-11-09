@@ -67,7 +67,7 @@ const Login = () => {
                     >
 
                         <Stack spacing={4}>
-                            <FormControl id="email">
+                            <FormControl id="email" isRequired>
                                 <FormLabel>Email address</FormLabel>
                                 <Input
                                     name='email'
@@ -78,7 +78,7 @@ const Login = () => {
                                     type="email"
                                 />
                             </FormControl>
-                            <FormControl id="password">
+                            <FormControl id="password" isRequired>
                                 <FormLabel>Password</FormLabel>
                                 <Input
                                     type="password"
@@ -99,11 +99,13 @@ const Login = () => {
                                     <Link color={'blue.400'}>Forgot password?</Link>
                                 </Stack>
                                 <Button
-                                    bg={'blue.400'}
-                                    color={'white'}
+                                    bg={'gray.50'}
+                                    color={'gray.800'}
                                     _hover={{
-                                        bg: 'blue.500',
+                                        bg: 'gray.100',
                                     }}
+                                    border="1px solid #e2e8f0"
+
                                     onClick={handleSubmit}
                                 >
                                     Sign in
@@ -113,9 +115,10 @@ const Login = () => {
                                 />
                                 <NavLink to="/register">
                                     <Text
-                                        color={'blue.400'}
+                                        color={'blue.500'}
+                                        align={'center'}
                                         _hover={{
-                                            color: 'blue.500',
+                                            textDecoration: 'underline',
                                         }}
                                         cursor={'pointer'}
                                     >
